@@ -1,0 +1,73 @@
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-5 ">
+      
+ 
+
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#login">
+              <h3>Login</h3>
+            </a></li>
+          <li><a data-toggle="tab" href="#register">
+              <h3> Register</h3>
+            </a></li>
+        </ul>
+
+        <div class="tab-content" style="font-size:16px;">
+
+          <div id="login" class="tab-pane fade in active">
+            <form method="post" action="/login">
+              <br>
+              Email<br>
+              <input type="text" name="email" id="emailLogin"  required> <br>
+              Password<br>
+              <input type="password" name="password"  required>
+              <br>
+              <br>
+              <input type="submit" value="Submit" />
+              <input type='reset' value='Reset' name='reset'>
+            </form>
+          
+            
+           
+          
+           
+           
+            </div>
+
+          <div id="register" class="tab-pane fade">
+            <br>
+            <form method="post" action="/signup" onsubmit="return checkForm(this);">
+              Email address <br>
+              <input type="text" name="email"  required><br>
+              Username<br>
+              <input type="text" name="username"  required><br>
+              Password<br>
+              <input type="password" name="pwd1" required><br>
+              Confirm Password<br>
+              <input type="password" name="pwd2" required><br>
+              <br>
+              
+              <button type="submit" value="Register" >Register</button>
+              <button type='reset' value='Reset' name='reset'>Reset</button>
+              
+            </form>
+           
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+        <hr />
+        <img src="http://localhost:5000/images/bg5.gif" style="border-radius: 2%">
+      </div>
+
+    </div>
+  </div>
+</div>

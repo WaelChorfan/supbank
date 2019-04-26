@@ -1,0 +1,45 @@
+body {
+  padding: 35px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("http://localhost:5000/images/bgh.gif")
+}
+td {
+  width: 140px; 
+  word-break:break-all;
+}
+
+a {
+  color: rgb(85, 29, 190);
+}
+div{
+  border-radius: 1%;
+
+}
+
+button {
+  font-size:22px;
+  
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: xx-large;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.carousel-img{
+   height:400px;
+   width:1136px;
+}
+
+.g-signin2{
+  width: 100%;
+}
+
+.g-signin2 > div{
+  margin: 0 auto;
+  
+}
