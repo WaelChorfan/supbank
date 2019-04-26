@@ -1,13 +1,12 @@
-var express = require('express'),
-  router = express.Router(),
-  User = require('../models/usersModel'),
-  Block = require('../models/block'),
+var express = require('express')
+  var router = express.Router()
+  var User = require('../models/user')
+  var Block = require('../models/block')
 mongoose = require('mongoose')
 
-/* GET home page. */
 router.get('/', function (req, res, next) {
-  var logged = false;
-  User.findOne({ email: req.session.user }, (err, user) => {
+  var logged = false
+  User.findOne({ email: req.user.local.username||req.user.google.email }, (err, user) => {
 
     Block.find({
 
@@ -31,12 +30,16 @@ router.get('/', function (req, res, next) {
         } 
 
       },(err,recieved) =>{
-        console.log(">>>>>",sent);
-        console.log("<<<<<",recieved);
-        res.render('wallet', { sent: sent,recieved:recieved, balance:user.balance?user.balance:0 , auth: true });
+        console.log(">>>>>",sent)
+        console.log("<<<<<",recieved)
+        res.render('wallet', { sent: sent,recieved:recieved, 
+          balance:user.balance?user.balance:0 
+          , auth: true })
       })
     })
   })
-});
+})
 
-module.exports = router;
+
+router.get('/test',(req,res) => res.send("ok"+req.user.google,req.user.local,req.user.balance))
+module.exports = router

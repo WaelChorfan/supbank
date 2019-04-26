@@ -5,21 +5,20 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 var userLoc = require('./geo-location').trackingLoc
 
 var User = require('../app/models/user')
-var configAuth = require('./auth');
+var configAuth = require('./auth')
 
 module.exports = function (passport) {
 	passport.serializeUser(function (user, done) {
-		done(null, user.id);
-	});
+		done(null, user.id)
+	})
 
 	passport.deserializeUser(function (id, done) {
 		User.findById(id, function (err, user) {
 			done(err, user)
 
-		});
-	});
+		})
+	})
 
-	//STRATEGY NAME IS local-signup 
 	passport.use('local-signup', new LocalStrategy({
 		usernameField: 'email',
 		passwordField: 'password',
@@ -29,13 +28,13 @@ module.exports = function (passport) {
 			process.nextTick(function () {
 				User.findOne({ 'local.username': email }, function (err, user) {
 					if (err)
-						return done(err);
+						return done(err)
 					if (user) {
 						return done(null, false, req.flash('signupMessage', 'That email already taken'));
 					} else {
 
-						var newUser = new User();
-						newUser.local.username = email;
+						var newUser = new User()
+						newUser.local.username = email
 						newUser.local.password = newUser.generateHash(password)
 
 
@@ -44,9 +43,9 @@ module.exports = function (passport) {
 						var prv = KeyGen.getPrivate('hex').toString(16)
 
 						newUser.publicKey = pub
-						newUser.privateKey = prv;
+						newUser.privateKey = prv
 
-						newUser.balance = 0;
+						newUser.balance = 0
 
 						newUser.save(function (err, user) {
 							if (err) { throw err } else {
@@ -56,8 +55,8 @@ module.exports = function (passport) {
 					}
 				})
 
-			});
-		}));
+			})
+		}))
 
 	passport.use('local-login', new LocalStrategy({
 		usernameField: 'email',
@@ -91,20 +90,20 @@ module.exports = function (passport) {
 					if (err) return done(err)
 					if (user) { return done(null, user) }
 					else {
-						var newUser = new User();
+						var newUser = new User()
 						newUser.google.id = profile.id
 						newUser.google.token = accessToken
 						newUser.google.name = profile.displayName
 						newUser.google.email = profile.emails[0].value
 
-						var KeyGen = new EC('secp256k1').genKeyPair();
-						var pub = KeyGen.getPublic('hex').toString(16);
-						var prv = KeyGen.getPrivate('hex').toString(16);
+						var KeyGen = new EC('secp256k1').genKeyPair()
+						var pub = KeyGen.getPublic('hex').toString(16)
+						var prv = KeyGen.getPrivate('hex').toString(16)
 
 						newUser.publicKey = pub
 						newUser.privateKey = prv
 
-						newUser.balance = 0;
+						newUser.balance = 0
 
 						newUser.save((err) => {
 							if (err) { throw err }

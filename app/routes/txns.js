@@ -3,11 +3,11 @@ var express = require('express');
 var router = express.Router();
 
 
-const SHA256 = require('crypto-js/sha256');
-var mongoose = require('mongoose'),
-  Txn = require('../models/txn');
-  User = require('../models/user');
-  Block =require('./m');
+const SHA256 = require('crypto-js/sha256')
+var mongoose = require('mongoose')
+var Txn = require('../models/txn')
+var User = require('../models/user')
+var Block = require('../models/block')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -40,11 +40,12 @@ router.post('/', function (req, res) {
       const hashTx = SHA256(to + from + amount + timestamp).toString();
       const signature = key.sign(hashTx, 'base64').toDER('hex');//signed by sender
 
-      if(userSender.email==userTo.email){
-        res.render('index', { 
-        message: 'Your cannot send txns to your own wallet',
-         auth: true
-      }); }
+      if (userSender.email == userTo.email) {
+        res.render('index', {
+          message: 'Your cannot send txns to your own wallet',
+          auth: true
+        });
+      }
 
       //create the txn
       var new_txn = new Txn({
@@ -67,12 +68,12 @@ router.post('/', function (req, res) {
         if (err)
           res.send(err);
         res.render('index',
-         {
-          message: 'Your transaction is pending ..,you will receive an email when it is confirmed'
-        , auth: true
-        })
+          {
+            message: 'Your transaction is pending ..,you will receive an email when it is confirmed'
+            , auth: true
+          })
       });
-      
+
       //update reciever's balance
       userTo.balance += amount;
       userTo.save();

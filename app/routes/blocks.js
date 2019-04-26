@@ -1,16 +1,16 @@
-'use strict';
+'use strict'
 // #region imports & conf
 
-var express = require('express');
-var router = express.Router();
-const SHA256 = require('crypto-js/sha256');
-const mongoose = require('mongoose'),
-  Block = mongoose.model('Blocks'),
-  Txn = mongoose.model('Txns'),
-  User = mongoose.model('Users');
+var express = require('express')
+var router = express.Router()
+const SHA256 = require('crypto-js/sha256')
+const mongoose = require('mongoose')
+  var Block = require('../models/block')
+  var Txn = require('../models/txn')
+  var User = require('../models/user')
 
 var miningReward = 100
-  , difficulty = 2;
+  , difficulty = 2
 
 
 //will delete txns after the block is created  
@@ -28,19 +28,19 @@ router.post('/minePendingTxns', function (req, res, next) {
           Txn.find({},
             (err, txns) => {
               //block params 
-              const timestamp = Date.now();
-              var hash = "";
-              console.log("mining ...");
+              const timestamp = Date.now()
+              var hash = ""
+              console.log("mining ...")
               while (hash.toString().substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
-                hash = "";
+                hash = ""
                 hash = SHA256((blks[blks.length - 1].hash + Date.now() + JSON.stringify(txns) +
-                  blks[blks.length - 1].blockNumber).toString());
+                  blks[blks.length - 1].blockNumber).toString())
               }
 
 
               //reward the miner
               User.find({ email: req.session.user }, function (err, user) {
-                user.balance += miningReward;
+                user.balance += miningReward
               })
               //make the txns
               
@@ -57,13 +57,13 @@ router.post('/minePendingTxns', function (req, res, next) {
                 new_block.save(async function (err, block) { })
               }
             })
-          resolve();
+          resolve()
         }).then(function () {
           console.log("deleting pending txns ..")
-          deletePendings();
+          deletePendings()
         })
       })
-      res.render('mine', { auth: true, message: 'block mined successfully' });
+      res.render('mine', { auth: true, message: 'block mined successfully' })
     }
   })
 
@@ -76,8 +76,8 @@ router.post('/minePendingTxns', function (req, res, next) {
 router.delete('/allBlocks', function (req, res) {
   Block.remove({ previousHash: { $ne: "1" } }, function (err, block) {
     if (err)
-      res.send(err);
-    res.send('all blocks are deleted exept the genesis block');
+      res.send(err)
+    res.send('all blocks are deleted exept the genesis block')
 
   });
 })
@@ -90,17 +90,17 @@ router.get('/block0', function (req, res, next) {
     previousHash: "0",
     hash: SHA256(Date.now().toString()),
     blockNumber: 0
-  });
+  })
 
   new_block.save(function (err, block) {
     if (err)
-      res.send(err);
-    res.send('genesis block created');
-  });
+      res.send(err)
+    res.send('genesis block created')
+  })
 
-});
+})
 
-module.exports = router;
+module.exports = router
 
 
 //#endregion
