@@ -1,9 +1,8 @@
 var express = require('express'),
   router = express.Router(),
   User = require('../models/usersModel'),
-  Block = require('../models/blocksModel'),
-mongoose = require('mongoose'),
-  Block = mongoose.model('Blocks');
+  Block = require('../models/block'),
+mongoose = require('mongoose')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {

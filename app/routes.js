@@ -69,19 +69,19 @@ module.exports = function (app, passport) {
 
 
 	var testRouter = require('./routes/test');
-	// var txnsRouter = require('./routes/txns');
-	// var walletRouter = require('./routes/wallet');
+	var txnsRouter = require('./routes/txns');
+	var walletRouter = require('./routes/wallet');
 	var mapRouter = require('./routes/map');
-	// var blocksRouter = require('./routes/blocks');
-	// var mineRouter = require('./routes/mine');
+	var blocksRouter = require('./routes/blocks');
+	var mineRouter = require('./routes/mine');
 	var apiRouter = require('./routes/api/usersLocations');
 
 	app.use('/test', isLoggedIn, testRouter);
-	// app.use('/txns', isLoggedIn, txnsRouter);
-	// app.use('/wallet', isLoggedIn, walletRouter);
+	app.use('/txns', isLoggedIn, txnsRouter);
+	app.use('/wallet', isLoggedIn, walletRouter);
 	app.use('/map', isLoggedIn, mapRouter)
-	// app.use('/blocks', isLoggedIn, blocksRouter);
-	// app.use('/mine', isLoggedIn, mineRouter);
+	app.use('/blocks', isLoggedIn, blocksRouter);
+	app.use('/mine', isLoggedIn, mineRouter);
 	app.use('/api', isLoggedIn, apiRouter);
 
 

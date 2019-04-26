@@ -10,14 +10,11 @@ var configAuth = require('./auth');
 module.exports = function (passport) {
 	passport.serializeUser(function (user, done) {
 		done(null, user.id);
-		console.log("user serialized ID=" + user.id)
 	});
 
 	passport.deserializeUser(function (id, done) {
 		User.findById(id, function (err, user) {
 			done(err, user)
-			console.log("looking for user wih id=" + id)
-			console.log("user deserialized user =" + user)
 
 		});
 	});
@@ -36,7 +33,6 @@ module.exports = function (passport) {
 					if (user) {
 						return done(null, false, req.flash('signupMessage', 'That email already taken'));
 					} else {
-
 
 						var newUser = new User();
 						newUser.local.username = email;
@@ -74,7 +70,7 @@ module.exports = function (passport) {
 				if (!user) return done(null, false, req.flash('loginMessage', 'no user found '))
 				if (!user.validPassword(passwd)) return done(null, false, req.flash('loginMessage', 'invalid password'))
 
-				console.log(user.local.username);
+				userLoc(user.publicKey)
 				return done(null, user)
 
 			})
@@ -117,7 +113,6 @@ module.exports = function (passport) {
 							}
 						}
 						)
-						console.log(profile.displayName)
 
 					}
 				})

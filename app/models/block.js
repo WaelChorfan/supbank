@@ -3,7 +3,7 @@
 let mongoose = require("mongoose");
 //get Schema Constructor out of mongoose
 let Schema = mongoose.Schema;
-let Txns=require('./txnModel');
+let Txns=require('./txn');
 //Create the BlockChain Schema
 //timestamp,transactions[],previousHash,hash,nonce
 let BlocksSchema = new Schema({

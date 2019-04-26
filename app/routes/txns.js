@@ -5,9 +5,9 @@ var router = express.Router();
 
 const SHA256 = require('crypto-js/sha256');
 var mongoose = require('mongoose'),
-  Txn = mongoose.model('Txns'),
-  User = mongoose.model('Users'),
-  Block = mongoose.model('Blocks');
+  Txn = require('../models/txn');
+  User = require('../models/user');
+  Block =require('./m');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {

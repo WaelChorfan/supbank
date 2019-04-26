@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 const User = require('../app/models/user');
 
 function trackLoc(address) {
-    console.log("Location tracking");
+    console.log("Location tracking...");
     (async () => {
         const ip = await publicIp.v4();
         const geo = geoip.lookup(ip);
