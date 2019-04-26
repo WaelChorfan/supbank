@@ -9,41 +9,42 @@ var Txn = require('../models/txn')
 var User = require('../models/user')
 var Block = require('../models/block')
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  userLoc(user.publicKey)
 
+router.get('/', function (req, res, next) {
   Block.find({}, function (err, blocks) {
-    if (err)
-      res.render('404', { message: 'You are not logged in ' });
+    if (err) throw err
     res.render('txns', { blocks: blocks, auth: true });
   });
 
 });
 
-//make a txn
+
+
+
+
 router.post('/', function (req, res) {
-  const EC = require('elliptic').ec;
+  const EC = require('elliptic').ec
   //we need to call ctor of EC to be able to use it to get the key
-  const ec = new EC('secp256k1');
+  const ec = new EC('secp256k1')
 
   //current user 
-  User.findOneAndUpdate({ email: req.session.user }, { new: false }, (err, userSender) => {
+  User.findOneAndUpdate({ publicKey: req.user.publicKey }, { new: false }, (err, userSender) => {
+    console.log(userSender);
     User.findOneAndUpdate({ publicKey: req.body.to }, { new: false }, (err, userTo) => {
-
+      console.log("userTo-------------->" + userSender);
       //txn params
       const key = ec.keyFromPrivate(userSender.privateKey);
       const from = userSender.publicKey //address of current user
       const to = req.body.to; // address of reciever
-      const amount = req.body.amount;
-      const timestamp = Date.now();
+      const amount = req.body.amount
+      const timestamp = Date.now()
       const hashTx = SHA256(to + from + amount + timestamp).toString();
       const signature = key.sign(hashTx, 'base64').toDER('hex');//signed by sender
 
-      if (userSender.email == userTo.email) {
+      if (userSender.publicKey == userTo.publicKey) {
         res.render('index', {
-          message: 'Your cannot send txns to your own wallet',
-          auth: true
+          message: 'Your cannot send coins to your own wallet',
+          logged: true
         });
       }
 
@@ -55,9 +56,8 @@ router.post('/', function (req, res) {
         toAddress: to,
 
         //txn emails
-        fromEmail: userSender.email,
-        toEmail: userTo.email,
-
+        fromEmail: userSender.local.username || userSender.google.email,
+        toEmail: userTo.local.username || userTo.google.email,
         amount: amount,
         timestamp: timestamp,
         signature: signature,
@@ -70,17 +70,17 @@ router.post('/', function (req, res) {
         res.render('index',
           {
             message: 'Your transaction is pending ..,you will receive an email when it is confirmed'
-            , auth: true
+            , logged: true
           })
       });
 
       //update reciever's balance
-      userTo.balance += amount;
-      userTo.save();
+      userTo.balance += amount
+      userTo.save()
 
       //update sender's balance
-      userSender.balance -= amount;
-      userSender.save();
+      userSender.balance -= amount
+      userSender.save()
 
 
     })
@@ -93,15 +93,11 @@ module.exports = router;
 
 
 
-
 // // //after putting in blocks
 // // exports.getAllTransactionsForEmail= function (req,res) {
 // //   const txs = [];
 // //   for (const block of this.chain) {
 // //     for (const tx of block.transactions) {
-
-
-
 
 
 // //       //in and out txns

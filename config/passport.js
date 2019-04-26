@@ -6,6 +6,9 @@ var userLoc = require('./geo-location').trackingLoc
 
 var User = require('../app/models/user')
 var configAuth = require('./auth')
+var genNickName=require('../utils/msc');
+
+
 
 module.exports = function (passport) {
 	passport.serializeUser(function (user, done) {
@@ -36,7 +39,7 @@ module.exports = function (passport) {
 						var newUser = new User()
 						newUser.local.username = email
 						newUser.local.password = newUser.generateHash(password)
-
+						newUser.nickName=genNickName()
 
 						var KeyGen = new EC('secp256k1').genKeyPair()
 						var pub = KeyGen.getPublic('hex').toString(16)
@@ -95,6 +98,8 @@ module.exports = function (passport) {
 						newUser.google.token = accessToken
 						newUser.google.name = profile.displayName
 						newUser.google.email = profile.emails[0].value
+
+						newUser.nickName=genNickName()
 
 						var KeyGen = new EC('secp256k1').genKeyPair()
 						var pub = KeyGen.getPublic('hex').toString(16)

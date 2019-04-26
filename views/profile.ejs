@@ -12,56 +12,63 @@
 	<link rel="shortcut icon" href="http://localhost:5000/images/favicon.png">
 	<!-- local css  -->
 	<link rel="stylesheet" href="/stylesheets/style.css">
+	<%# local script %>
+	<script src="http://localhost:5000/javascripts/profile.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	<script>
+		function copyToClipboard(element) {
+
+			var $temp = $("<input>");
+			$("body").append($temp);
+			$temp.val($(element).text()).select();
+			document.execCommand("copy");
+			$temp.remove();
+			setTimeout(() => {
+				alert(" Address copied to clip board")
+			}, 200);
+		}
+
+	</script>
+
 </head>
 
 <body>
 	<%- include includes/header.ejs %>
 	<div class="container">
 
-		<div class="page-header text-center">
-			<h1><span class="fa fa-anchor"></span>Profile Page</h1>
-		</div>
-
-		<div class="row">
-
-			<% if (!user.google.id) {%>
-			<!-- LOCAL INFORMATION -->
-			<div class="col-sm-6">
-				<div class="well">
-					<h3><span class="fa fa-user"></span> Local</h3>
-					<p>
-						<strong>id</strong>: <%= user._id %><br>
-						<strong>email</strong>: <%= user.local.username %><br>
-						<strong>password</strong>: <%= user.local.password %>
-					</p>
-
-				</div>
+		<div class="jumbotron">
+			<div class="page-header text-center">
+				<h2><span class="fa fa-anchor"></span>Welcome 
+				  <p style="background-color:#877CB3;"><%=user.nickName %></p></h2>
 			</div>
-			<%}%>
-		<!-- Google INFORMATION -->
 
-        	<div class="col-sm-6">
-			<div class="well">
-				<h3><span class="fa fa-google"></span> Information</h3>
+			<div class="row">
+				<!-- INFORMATION -->
+				<div class="col-sm-12">
+					<div class="well well-sm">
+						<h3><span class="fa fa-google"></span> User Info</h3>
+						<p>
+							<strong>Email</strong>: <%= user.local.username|| user.google.email %><br>
+							<strong> Nick Name</strong>: <%= user.nickName  %><br>
+							<strong> Balance</strong>: <%= user.balance  %>$<br>
+							<strong>Your Wallet Address</strong>:
+							<textarea rows="4" cols="50" readonly="readonly" style="background-color:#877CB3;"
+							 id="ad" > <%= user.publicKey  %></textarea>
+						</p>
+						<button onclick="copyToClipboard('#ad')">Copy  Address To Clipboard</button>
 
-					<p>
-						<!-- <strong>id</strong>: <%= user.google.id %><br> -->
-			<!-- <strong>token</strong>: <%= user.google.token %><br> -->
-			<strong> Email</strong>: <%= user.google.email %><br>
-			<strong> Name</strong>: <%= user.google.name  %><br>
-			<strong>Your Wallet Address</strong>: <%= user.publicKey  %>
-			</p>
+					</div>
+				</div>
+
+			</div>
 
 		</div>
 	</div>
 
-	</div>
-
-	</div>
-
-	<div>
-		<%- include includes/footer.ejs %>
-	</div>
+	<%- include includes/footer.ejs %>
 
 </body>
 

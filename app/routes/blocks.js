@@ -19,7 +19,7 @@ function deletePendings() { Txn.remove({}, function (err, txn) { }) }
 router.post('/minePendingTxns', function (req, res, next) {
   Txn.count({}).then((count) => {
     if (count == 0) {
-      res.render('mine', { auth: true, message: 'All blocks are  already mined ,please try later.' });
+      res.render('mine', { logged: true, message: 'All blocks are  already mined ,please try later.' });
     } else {
 
       //mining here + creating a block
@@ -39,10 +39,11 @@ router.post('/minePendingTxns', function (req, res, next) {
 
 
               //reward the miner
-              User.find({ email: req.session.user }, function (err, user) {
+              User.find({ publicKey: req.user.publicKey }, function (err, user) {
                 user.balance += miningReward
               })
-              //make the txns
+              //update balances
+              
               
 
               //create the block
@@ -63,7 +64,7 @@ router.post('/minePendingTxns', function (req, res, next) {
           deletePendings()
         })
       })
-      res.render('mine', { auth: true, message: 'block mined successfully' })
+      res.render('mine', { message: 'block mined successfully' ,logged:true})
     }
   })
 

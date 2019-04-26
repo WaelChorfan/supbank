@@ -1,0 +1,6 @@
+     mail: 'supbank051@gmail.com',
+      pass: 'Xc0T5mBzEix7y9Z1'
+
+      connect to cloud
+      make genesis block
+      

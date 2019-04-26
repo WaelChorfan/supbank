@@ -4,7 +4,7 @@
 
 <head>
 	<title> SUP BANK </title>
-	
+
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<!-- load bootstrap css -->
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
@@ -15,31 +15,60 @@
 	<link rel="stylesheet" href="/stylesheets/style.css">
 
 	<!-- local script -->
-	<script src="http://localhost:5000/javascripts/index.js"></script>
 
 
 </head>
 
 <body>
-	<%- include includes/header.ejs %>
-	<div class="container">
+
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header"><a class="navbar-brand" href="/">Sup Bank</a></div>
+			<ul class="nav navbar-nav">
+				<% if(logged){%>
+
+				<li><a href="/profile">Home</a></li>
+				<li><a href="/txns">Transactions</a></li>
+				<li><a href="/map">Our Network</a></li>
+				<li><a href="/wallet">My Wallet</a></li>
+				<li><a href="/mine">Mining</a></li>
+
+				<li>
+					<a href="/logout">
+						<span class="glyphicon glyphicon-log-out">Logout</span>
+					</a>
+				</li>
+				<%}%>
+        </ul>
+    </div>
+</nav>
+
+
 
 		<div class="jumbotron text-center">
-			<h1> Welcome to Sup Bank </h1>
-			<h1><span class="fa fa-lock"></span> Authentication</h1>
-			<a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Login</a>
-			<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Signup</a>
+		
+			
+		  <%if (!logged){%>
+				<div class="container">
+					<h3><span class="fa fa-lock"></span> Welcome to Sup Bank</h3>
+					<a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Login</a>
+					<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Signup</a>
+					<a href="/auth/google" class="btn btn-danger">
+						<span class="fa fa-google-plus"></span> Login with Google</a>
+				</div>
+				<%} else{%>
+				<div class="container">
+					<h3><span class="fa fa-unlock"></span> Welcome to Sup Bank</h3>
 
-			<a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Login with Google</a>
-		</div>
-
+				</div>
+				<%}%>
 
 	</div>
 
 
 	<div>
 		<%- include includes/footer.ejs %>
-	</div>
+		</div>
 
 </body>
 

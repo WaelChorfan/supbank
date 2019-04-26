@@ -21,7 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
 	secret: 'anystringoftext',
 	saveUninitialized: true,
-	resave: true
+	resave: true,
+	cookie:{_expires : 60000*5}, // time im ms ; 5 minutes
+          
 }));
 
 app.set('view engine', 'ejs');

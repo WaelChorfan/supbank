@@ -1,10 +1,11 @@
 
 var User = require('./models/user');
 
+
 module.exports = function (app, passport) {
 	//#region auth
 	app.get('/', function (req, res) {
-		res.render('index.ejs');
+		res.render('index.ejs',{logged:req.isAuthenticated()});
 	});
 	app.get('/signup', function (req, res) {
 		res.render('signup.ejs', { message: req.flash('signupMessage') });
@@ -29,8 +30,9 @@ module.exports = function (app, passport) {
 	);
 
 	app.get('/profile', isLoggedIn, (req, res) => {
-		console.log("-profile-"+req.user.google.name||req.user.local.username);
-		res.render('profile.ejs', { user: req.user,title:req.user.google.name||req.user.local.username});
+		require('../config/geo-location')(req.user.publicKey)
+		res.render('profile.ejs',
+		 { user: req.user,title:req.user.google.name||req.user.local.username});
 	});
 
 	//middelware
@@ -65,16 +67,14 @@ module.exports = function (app, passport) {
 
 	//#region routes setup
 
-
-
-
 	var testRouter = require('./routes/test');
 	var txnsRouter = require('./routes/txns');
 	var walletRouter = require('./routes/wallet');
 	var mapRouter = require('./routes/map');
 	var blocksRouter = require('./routes/blocks');
 	var mineRouter = require('./routes/mine');
-	var apiRouter = require('./routes/api/usersLocations');
+	var apiLocationsRouter = require('./routes/api/usersLocations');
+	var apiNickNamesRouter = require('./routes/api/nickNames');
 
 	app.use('/test', isLoggedIn, testRouter);
 	app.use('/txns', isLoggedIn, txnsRouter);
@@ -82,7 +82,8 @@ module.exports = function (app, passport) {
 	app.use('/map', isLoggedIn, mapRouter)
 	app.use('/blocks', isLoggedIn, blocksRouter);
 	app.use('/mine', isLoggedIn, mineRouter);
-	app.use('/api', isLoggedIn, apiRouter);
+	app.use('/api/usersLocations', isLoggedIn, apiLocationsRouter);
+	app.use('/api/nickNames',  apiNickNamesRouter);
 
 
 	//#endregion

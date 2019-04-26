@@ -1,17 +1,18 @@
 const publicIp = require('public-ip');
 const geoip = require('geoip-lite');
-var mongoose = require('mongoose');
-const User = mongoose.model('Users');
+const User = require('../app/models/user');
+function userLoc(p) {
+    console.log(p);
 
-function trackLoc(emailToLocate) {
-    console.log("Location tracking");
-    (async () => {
+    async () => {
         const ip = await publicIp.v4();
         const geo = geoip.lookup(ip);
-        User.update({ email: emailToLocate }, { $set: { location: geo } }, function (err, user) {
+        User.update({ nickName: p }, { $set: { location: geo } }, function (err, user) {
+            console.log(user);
         })
     }
-    )()
+    
 }
 
-module.exports.trackingLoc = trackLoc;
+
+module.exports.userLoc = userLoc;

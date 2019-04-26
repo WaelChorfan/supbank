@@ -2,6 +2,7 @@
 var mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 var Schema = mongoose.Schema
+var generateName = require('sillyname')
 
 var userSchema = mongoose.Schema({
 	local: {
@@ -21,7 +22,8 @@ var userSchema = mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
-	balance: { type: Number, default: 0 }
+	balance: { type: Number, default: 0 },
+	nickName: String
 });
 userSchema.methods.generateHash = (password) => {
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(9))
@@ -34,6 +36,9 @@ userSchema.methods.validPassword = function (password) {
 userSchema.methods.decryptPass = function (hash) {
 	return bcrypt.compare(9, this.local.password, function (err, res) { console.log(res); })
 }
+
+
+
 
 
 

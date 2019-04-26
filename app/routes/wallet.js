@@ -5,8 +5,7 @@ var express = require('express')
 mongoose = require('mongoose')
 
 router.get('/', function (req, res, next) {
-  var logged = false
-  User.findOne({ email: req.user.local.username||req.user.google.email }, (err, user) => {
+  User.findOne({ publicKey : req.user.publicKey }, (err, user) => {
 
     Block.find({
 
@@ -14,7 +13,7 @@ router.get('/', function (req, res, next) {
       {
         $elemMatch : 
         { 
-          fromEmail:req.session.user,
+          fromEmail:req.user.publicKey,
         }   
       } 
     }, (err, sent) => {
@@ -25,7 +24,7 @@ router.get('/', function (req, res, next) {
         {
           $elemMatch : 
           { 
-            toEmail:req.session.user
+            toEmail: req.user.publicKey
           }   
         } 
 
@@ -34,12 +33,11 @@ router.get('/', function (req, res, next) {
         console.log("<<<<<",recieved)
         res.render('wallet', { sent: sent,recieved:recieved, 
           balance:user.balance?user.balance:0 
-          , auth: true })
+          })
       })
     })
   })
 })
 
 
-router.get('/test',(req,res) => res.send("ok"+req.user.google,req.user.local,req.user.balance))
 module.exports = router
