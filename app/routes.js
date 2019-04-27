@@ -5,7 +5,7 @@ var User = require('./models/user');
 module.exports = function (app, passport) {
 	//#region auth
 	app.get('/', function (req, res) {
-		res.render('index.ejs',{logged:req.isAuthenticated()});
+		res.render('index.ejs',{logged:req.isAuthenticated(),message:'Welcome to Sup Bank' });
 	});
 	app.get('/signup', function (req, res) {
 		res.render('signup.ejs', { message: req.flash('signupMessage') });
@@ -30,7 +30,7 @@ module.exports = function (app, passport) {
 	);
 
 	app.get('/profile', isLoggedIn, (req, res) => {
-		require('../config/geo-location')(req.user.publicKey)
+		require('../utils/geo-location')(req.user.publicKey)
 		res.render('profile.ejs',
 		 { user: req.user,title:req.user.google.name||req.user.local.username});
 	});

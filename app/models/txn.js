@@ -12,8 +12,8 @@ var TxnSchema = new Schema(
       type: String,
       required: ''
     },
-    fromEmail: String,
-    toEmail: String,
+    fromName: String,
+    toName: String,
     amount: Number,
     timestamp: Date,
     txnHash: { type: String, unique: true, dropDups: true },

@@ -2,7 +2,6 @@ var EC = require('elliptic').ec
 
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-var userLoc = require('./geo-location').trackingLoc
 
 var User = require('../app/models/user')
 var configAuth = require('./auth')
@@ -72,7 +71,7 @@ module.exports = function (passport) {
 				if (!user) return done(null, false, req.flash('loginMessage', 'no user found '))
 				if (!user.validPassword(passwd)) return done(null, false, req.flash('loginMessage', 'invalid password'))
 
-				userLoc(user.publicKey)
+				
 				return done(null, user)
 
 			})

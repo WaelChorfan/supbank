@@ -5,7 +5,11 @@ var express = require('express')
 mongoose = require('mongoose')
 
 router.get('/', function (req, res, next) {
-  User.findOne({ publicKey : req.user.publicKey }, (err, user) => {
+
+
+User.find({},'-_id -local -google  -privateKey -Created_date -location -balance',(err,users) =>{
+
+  User.findOne({ publicKey : req.user.publicKey },  (err, user) => {
 
     Block.find({
 
@@ -31,13 +35,15 @@ router.get('/', function (req, res, next) {
       },(err,recieved) =>{
         console.log(">>>>>",sent)
         console.log("<<<<<",recieved)
-        res.render('wallet', { sent: sent,recieved:recieved, 
-          balance:user.balance?user.balance:0 
+        res.render('wallet.ejs', { sent: sent,recieved:recieved, 
+          currentUser:user,
+          balance:user.balance?user.balance:0 ,
+          users:users
           })
       })
     })
   })
 })
-
+})
 
 module.exports = router

@@ -22,8 +22,7 @@ app.use(session({
 	secret: 'anystringoftext',
 	saveUninitialized: true,
 	resave: true,
-	cookie:{_expires : 60000*5}, // time im ms ; 5 minutes
-          
+	cookie: { maxAge : 3600000 } // time im ms 
 }));
 
 app.set('view engine', 'ejs');

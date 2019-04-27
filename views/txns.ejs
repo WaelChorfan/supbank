@@ -22,45 +22,53 @@
       <h2>Transactions </h2>
 
       <!-- <div style=" display :inline"> -->
-      <div >
+      <div>
 
-        Sender Address
-        <input type="text" id="searchBySenderAddress" placeholder=" f37d0cb372.. " />
+        Sender Address: &nbsp;&nbsp;
+        <input type="text" id="searchBySenderAddress" placeholder=" .. " />
         <br>
-        Receiver Address
-        <input type="text" id="searchByReceiverAddress" placeholder=" 96d4eae56f.." />
         <br>
-         Search by Block ID
-        <input type="text" id="searchByBlockNumber" placeholder="  Search By Block"/> 
+        Receiver Address:
+        <input type="text" id="searchByReceiverAddress" placeholder=" .." />
+        <br>
+        <br>
+        Search by Block ID
+        <!-- <input type="text" id="searchByBlockNumber" placeholder=".."/>  -->
+        <input id="searchByBlockNumber" type="number" placeholder="0 " min="0" step="1" />
       </div>
+      <br>
       <hr />
-  
-<!-- table was here -->
 
-<table class="table table-condensed ">
-    <tr>
-      <th>From</th>
-      <th>To</th>
-      <th>Amount</th>
-      <th>Date</th>
-      <th>Block ID</th> 
-    </tr>
-    <tr>
-      <% for(var i=1; i < blocks.length; i++) { %>
-        <% for(var j=0; j < blocks[i].transactions.length; j++) { %>
-      <tr>
-      <td ><%= JSON.stringify(blocks[i].transactions[j].fromAddress).slice(1,131) %></td>
-      <td><%= JSON.stringify(blocks[i].transactions[j].toAddress).slice(1,131) %></td>
-      <td><%= JSON.stringify(blocks[i].transactions[j].amount) %>&nbsp;$</td>
-      <td><%= JSON.stringify(blocks[i].transactions[j].timestamp )
+      <!-- table was here -->
+
+      <table class="table table-condensed ">
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Block ID</th>
+        </tr>
+        <tr>
+          <% for(var i=1; i < blocks.length; i++) { %>
+          <% for(var j=0; j < blocks[i].transactions.length; j++) { %>
+        <tr>
+          <td> <textarea rows="3" cols="50" style="overflow:hidden;" readonly="readonly">
+            <%= JSON.stringify(blocks[i].transactions[j].fromAddress).slice(1,131) %></textarea>
+          </td>
+          <td><textarea rows="3" cols="50" style="overflow:hidden;" readonly="readonly">
+            <%= JSON.stringify(blocks[i].transactions[j].toAddress).slice(1,131) %></textarea>
+          </td>
+          <td><%= JSON.stringify(blocks[i].transactions[j].amount) %>&nbsp;$</td>
+          <td><%= JSON.stringify(blocks[i].transactions[j].timestamp )
         .slice(1, 17).replace('T','  ')
          %></td>
-      <td><%= JSON.stringify(blocks[i].blockNumber) %></td>
-    </tr>
-    <% } %>
-    <% } %>
+          <td><%= JSON.stringify(blocks[i].blockNumber) %></td>
+        </tr>
+        <% } %>
+        <% } %>
 
-  </table>
+      </table>
 
     </div>
   </div>
@@ -95,8 +103,8 @@
     });
 
 
- // searchBySenderAddress
- $("#searchByReceiverAddress").on("keyup", function () {
+    // searchBySenderAddress
+    $("#searchByReceiverAddress").on("keyup", function () {
       var value = $(this).val();
 
       $("table tr").each(function (index) {
@@ -118,26 +126,26 @@
 
 
 
-// searchByBlockNumber
-$("#searchByBlockNumber").on("keyup", function () {
-  var value = $(this).val();
+    // searchByBlockNumber
+    $("#searchByBlockNumber").on("keyup", function () {
+      var value = $(this).val();
 
-  $("table tr").each(function (index) {
-    if (index !== 0) {
+      $("table tr").each(function (index) {
+        if (index !== 0) {
 
-      $row = $(this);
+          $row = $(this);
 
-      var id = $row.find("td:eq(5)").text();
+          var id = $row.find("td:eq(5)").text();
 
-      if (id.indexOf(value) !== 0) {
-        $row.hide();
-      }
-      else {
-        $row.show();
-      }
-    }
-  });
-});
+          if (id.indexOf(value) !== 0) {
+            $row.hide();
+          }
+          else {
+            $row.show();
+          }
+        }
+      });
+    });
 
 
 

@@ -5,9 +5,9 @@ var express = require('express')
 var router = express.Router()
 const SHA256 = require('crypto-js/sha256')
 const mongoose = require('mongoose')
-  var Block = require('../models/block')
-  var Txn = require('../models/txn')
-  var User = require('../models/user')
+var Block = require('../models/block')
+var Txn = require('../models/txn')
+var User = require('../models/user')
 
 var miningReward = 100
   , difficulty = 2
@@ -40,11 +40,18 @@ router.post('/minePendingTxns', function (req, res, next) {
 
               //reward the miner
               User.find({ publicKey: req.user.publicKey }, function (err, user) {
+                console.log("reward the miner");
                 user.balance += miningReward
               })
               //update balances
-              
-              
+              txns.forEach((txn) => {
+                //update reciever's balance
+                User.find({ publicKey: txn.fromAddress }, (err, sender) => sender.balance -= txn.amount)
+                //update sender's balance
+                User.find({ publicKey: txn.fromAddress }, (err, reciever) => reciever.balance += txn.amount)
+              }
+              )
+
 
               //create the block
               var new_block = new Block({
@@ -58,13 +65,16 @@ router.post('/minePendingTxns', function (req, res, next) {
                 new_block.save(async function (err, block) { })
               }
             })
-          resolve()
+          resolve(
+            // on resolve make this
+            console.log("on resolve block mining ,make this")
+          )
         }).then(function () {
           console.log("deleting pending txns ..")
           deletePendings()
         })
       })
-      res.render('mine', { message: 'block mined successfully' ,logged:true})
+      res.render('mine', { message: 'block mined successfully', logged: true })
     }
   })
 
