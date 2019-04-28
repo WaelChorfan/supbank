@@ -5,7 +5,7 @@ const geoip = require('geoip-lite');
 const User = require('../app/models/user');
 const mongoose = require('mongoose');
 var configDB = require('../config/database');
-mongoose.connect(configDB.local, { useNewUrlParser: true , useFindAndModify: false});
+mongoose.connect(configDB.cloud, { useNewUrlParser: true , useFindAndModify: false});
 
 module.exports =
   async (address) => {

@@ -6,7 +6,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('mine', { message:'',logged: true });
+    res.render('mine.ejs', { message:'',logged: true });
 });
 
 

@@ -1,4 +1,38 @@
 
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var morgan = require('morgan');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+const flash = require('connect-flash');
+require('../config/passport')(passport);
+var User = require('./models/user');
+
+var app = express();
+var configDB = require('../config/database.js');
+mongoose.connect(configDB.cloud, { useNewUrlParser: true });
+
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+	secret: 'anystringoftext',
+	saveUninitialized: true,
+	resave: true,
+	cookie: { maxAge : 3600000 } // time im ms 
+}));
+
+app.set('view engine', 'ejs');
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, './public')));
+app.use(flash())
+
 var User = require('./models/user');
 
 
@@ -67,7 +101,7 @@ module.exports = function (app, passport) {
 
 	//#region routes setup
 
-	var testRouter = require('./routes/test');
+	var issueRouter = require('./routes/issue');
 	var txnsRouter = require('./routes/txns');
 	var walletRouter = require('./routes/wallet');
 	var mapRouter = require('./routes/map');
@@ -76,7 +110,7 @@ module.exports = function (app, passport) {
 	var apiLocationsRouter = require('./routes/api/usersLocations');
 	var apiNickNamesRouter = require('./routes/api/nickNames');
 
-	app.use('/test', isLoggedIn, testRouter);
+	app.use('/issue', isLoggedIn, issueRouter);
 	app.use('/txns', isLoggedIn, txnsRouter);
 	app.use('/wallet', isLoggedIn, walletRouter);
 	app.use('/map', isLoggedIn, mapRouter)

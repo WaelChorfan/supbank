@@ -1,6 +1,25 @@
-     mail: 'supbank051@gmail.com',
-      pass: 'Xc0T5mBzEix7y9Z1'
+     mail(same): 'supbank051@gmail.com',
+      pass mail: 'Xc0T5mBzEix7y9Z1'
+      pass db cloud :'Xc0T5mBzEix7y9Z1*'  
+         users :  user: supbank051   |  pass: 0000
+      pass heroku : 'Xc0T5mBzEix7y9Z1!'
 
-      connect to cloud
-      make genesis block
+      heroku https://devcenter.heroku.com/articles/heroku-cli
       
+      
+      
+
+for db hosting :
+https://mlab.com/signup/
+(free 500Mb plan)
+for website(node js hosting)
+https://www.openode.io/
+  npm i -g openode
+  verify confirmation mail 
+openode deploy
+(follow instrucions)
+ 
+
+     make genesis block
+     websitelink/blocks/block0
+     modify  supbank user balance to 100000+ and make the first  txns
