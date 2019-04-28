@@ -5,7 +5,7 @@
   <title>SupBank-Home</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <%# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> %>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <link rel="shortcut icon" href="http://localhost:5000/images/favicon.png">
 
@@ -25,23 +25,23 @@
       <div>
 
         Sender Address: &nbsp;&nbsp;
-        <input type="text" id="searchBySenderAddress" placeholder=" .. " />
+        <input type="text" id="searchBySenderAddress" />
         <br>
         <br>
         Receiver Address:
-        <input type="text" id="searchByReceiverAddress" placeholder=" .." />
+        <input type="text" id="searchByReceiverAddress" />
         <br>
         <br>
         Search by Block ID
         <!-- <input type="text" id="searchByBlockNumber" placeholder=".."/>  -->
-        <input id="searchByBlockNumber" type="number" placeholder="0 " min="0" step="1" />
+        <input id="searchByBlockNumber" type="number" placeholder="0" min="0" max="<%=blocks.length-1%>" step="1" />
       </div>
       <br>
       <hr />
 
       <!-- table was here -->
 
-      <table class="table table-condensed ">
+      <table class="table table-striped ">
         <tr>
           <th>From</th>
           <th>To</th>
@@ -53,11 +53,21 @@
           <% for(var i=1; i < blocks.length; i++) { %>
           <% for(var j=0; j < blocks[i].transactions.length; j++) { %>
         <tr>
-          <td> <textarea rows="3" cols="50" style="overflow:hidden;" readonly="readonly">
-            <%= JSON.stringify(blocks[i].transactions[j].fromAddress).slice(1,131) %></textarea>
+          <td>
+            <!-- <textarea rows="3" cols="50"   style="overflow:hidden;" readonly="readonly"> -->
+            <%= JSON.stringify(blocks[i].transactions[j].fromName)
+            .slice(1,blocks[i].transactions[j].fromName.length+1) 
+            %>
+
+            <!-- </textarea> -->
+
           </td>
-          <td><textarea rows="3" cols="50" style="overflow:hidden;" readonly="readonly">
-            <%= JSON.stringify(blocks[i].transactions[j].toAddress).slice(1,131) %></textarea>
+          <td>
+            <!-- <textarea rows="3" cols="50" style="overflow:hidden;" readonly="readonly"> -->
+            <%= JSON.stringify(blocks[i].transactions[j].toName)
+            .slice(1,blocks[i].transactions[j].toName.length+1) 
+             %>
+          <!-- </textarea> -->
           </td>
           <td><%= JSON.stringify(blocks[i].transactions[j].amount) %>&nbsp;$</td>
           <td><%= JSON.stringify(blocks[i].transactions[j].timestamp )
@@ -76,22 +86,17 @@
     <%- include includes/footer.ejs %>
   </div>
 
-
+  <script src="http://localhost:5000/javascripts/msc.js"></script>
 
   <script>
-
 
     // searchBySenderAddress
     $("#searchBySenderAddress").on("keyup", function () {
       var value = $(this).val();
-
-      $("table tr").each(function (index) {
+      $("table tr ").each(function (index) {
         if (index !== 0) {
-
           $row = $(this);
-
-          var id = $row.find("td:first").text();
-
+          var id = $row.find("td:eq(0)").text();
           if (id.indexOf(value) !== 0) {
             $row.hide();
           }
@@ -106,14 +111,10 @@
     // searchBySenderAddress
     $("#searchByReceiverAddress").on("keyup", function () {
       var value = $(this).val();
-
       $("table tr").each(function (index) {
         if (index !== 0) {
-
           $row = $(this);
-
-          var id = $row.find("td:eq(2)").text();
-
+          var id = $row.find("td:eq(1)").text();
           if (id.indexOf(value) !== 0) {
             $row.hide();
           }
@@ -127,17 +128,13 @@
 
 
     // searchByBlockNumber
-    $("#searchByBlockNumber").on("keyup", function () {
+    $("#searchByBlockNumber").on("keyup change", function () {
       var value = $(this).val();
-
       $("table tr").each(function (index) {
         if (index !== 0) {
-
           $row = $(this);
-
-          var id = $row.find("td:eq(5)").text();
-
-          if (id.indexOf(value) !== 0) {
+          var id = $row.find("td:eq(4)").text();
+          if (id !== value) {
             $row.hide();
           }
           else {

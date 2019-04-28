@@ -13,25 +13,45 @@
   <script src="http://code.jquery.com/jquery-1.8.3.min.js"> </script>
 
   <%# include axios for getting users %>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <%# <script src="https://unpkg.com/axios/dist/axios.min.js"></script> %>
 
-  <!-- include local script -->
-  <script src="http://localhost:5000/javascripts/txns.js">
-  </script> 
+
+
 </head>
 
 <body>
   <%- include includes/header.ejs %>
   <div class="jumbotron">
     <div class="container">
+      <h2 ALIGN="center">
+        <button class="btn btn-info" data-toggle="modal" data-target="#newTxnModal">Make a new
+          Transaction
+          <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
+      </h2>
       <div class="row">
-        <h2>My Wallet </h2>
-        <div class="col-md-3">
-          <h4> Sent </h4>
+        <h1>
+          <p ALIGN="center">
+            <button type="button" class="btn btn-primary">
+              Balance <span class="badge badge-dark"><%=balance%>$ </span>
+              <span class="sr-only">$</span>
+            </button>
+          </p>
 
-          <table class="table table-responsive " border="1">
+        </h1>
+        <div class="col-sm-1" style="border-left:1px solid #000;height:auto;width:auto"></div>
+
+
+
+        <div class="col-md-5">
+          <h4>
+            <p ALIGN="center"> Sent
+              <span class="	glyphicon  glyphicon-indent-left">
+            </p></span>
+          </h4>
+          <table class="table table-responsive " border="2">
             <tr>
-              <th>To</th>
+              <th width="40%">To</th>
               <th>Amount</th>
               <th>Date</th>
               <th>Block ID</th>
@@ -42,7 +62,8 @@
               <% for(var i=0; i < sent.length; i++) { %>
               <% for(var j=0; j < sent[i].transactions.length; j++) { %>
             <tr>
-              <td><%= JSON.stringify(sent[i].transactions[j].toName).slice(1,131) %></td>
+              <td><%= JSON.stringify(sent[i].transactions[j].toName)
+              .slice(1,sent[i].transactions[j].toName.length+1) %></td>
               <td><%= JSON.stringify(sent[i].transactions[j].amount) %>&nbsp;$</td>
               <td><%= JSON.stringify(sent[i].transactions[j].timestamp )
               .slice(1, 17).replace('T','  ')
@@ -54,95 +75,114 @@
 
           </table>
         </div>
+        <div class="col-sm-1" style="border-left:1px solid #000;height:auto;width:auto"></div>
 
-        <div class="col-md-3">
-          <h4> Recieved </h4>
-          <table class="table table-responsive " border="1">
-            <tr>
-              <th>From</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Block ID</th>
-            </tr>
-            <tr>
-              <% for(var i=0; i < recieved.length; i++) { %>
-              <% for(var j=0; j < recieved[i].transactions.length; j++) { %>
+        <div class="col-md-5">
+          <h4>
+            <p ALIGN="center"> Recieved
+              <span class="	glyphicon  glyphicon-indent-right"></span>
+            </p>
+          </h4>
+    <table class="table table-responsive " border="2">
+        <tr>
+          <th width="40%">To</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Block ID</th>
+        </tr>
+        <!-- will be dynamically filled  -->
+        <!--blocks (with block id) -->
+        <tr>
+          <% for(var i=0; i < recieved.length; i++) { %>
+          <% for(var j=0; j < recieved[i].transactions.length; j++) { %>
+        <tr>
+          <td><%= JSON.stringify(recieved[i].transactions[j].toName)
+          .slice(1,recieved[i].transactions[j].toName.length+1) %></td>
+          <td><%= JSON.stringify(recieved[i].transactions[j].amount) %>&nbsp;$</td>
+          <td><%= JSON.stringify(recieved[i].transactions[j].timestamp )
+          .slice(1, 17).replace('T','  ')
+           %></td>
+          <td><%= JSON.stringify(recieved[i].blockNumber) %></td>
+        </tr>
+        <% } %>
+        <% } %>
 
-            <tr>
-              <td><%= JSON.stringify(recieved[i].transactions[j].fromName).slice(1,131) %></td>
-              <td><%= JSON.stringify(recieved[i].transactions[j].amount) %>&nbsp;$</td>
-              <td><%= JSON.stringify(recieved[i].transactions[j].timestamp )
-              .slice(1, 17).replace('T','  ')
-               %></td>
-              <td><%= JSON.stringify(recieved[i].blockNumber) %></td>
-            </tr>
-            <% } %>
-            <% } %>
-
-          </table>
-        </div>
-
-<div class="col-md-1" style="border-left:1px solid #000;height:200px"></div>
-        <div class="col-md-4">
-          <h2>Make Txns</h2>
-          <!-- hidden -->
-
-          <form method="post" action="/txns" onsubmit="return checkTxn(this);">
-            <div class="input-group">
-              <input list="listID" id="toADDRESS" name="to" required>
-              <datalist id="listID">
-                <%for(var i=0;i<users.length;i++){%>
-                <option value="<%=users[i]['nickName']%>" class="form-control">
-                  <%}%>
-        </datalist>
-            
-            
-            <br>
-            
-            
-            
-              <div>
-               <!-- onselect alert the nickname
-               ='alert($("#toADDRESS").value)'>verify address</button>
-            -->
-                <div class="input-group">
-                  <span class="input-group-addon">$</span>
-                  <input name="amount" type="number" placeholder="Amount " min="100" step="any" data-number-to-fixed="2"
-                    data-number-stepfactor="100" class="form-control currency" />
-                </div>
-
-
-                <br />
-                <br />
-                <p id="fromADDRESS" hidden><%= currentUser.publicKey%> </p>
-
-                  <input type="submit" value="Confirm" />
-                  <input type='reset' value='Clear' name='reset'>
-          </form>
+      </table>
 
         </div>
 
-        <div class="col-md-1">
-          <br>
-          <br>
-          <h3>
-            Balance
-            <span class="label label-default" id="senderBalance"><%=balance%> </span>$</a>
-          </h3>
 
-        </div>
 
       </div>
 
+    </div>
 
+
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="newTxnModal" tabindex="-1" role="dialog" aria-labelledby="New transaction !"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Making a new transaction
+
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="/txns" onsubmit="return checkTxn(this);">
+            <div class="input-group">
+              <select id="toADDRESS" onchange="getAddress()">
+                <option >---select reciever--</option>
+                <%for(var i=0;i<users.length;i++){%>
+                <option value="<%=users[i]['publicKey']%>"> <%=users[i]['nickName'] %>
+                  <%}%> 
+        </select>
+      </div>
+          <br>
+          <br>
+           <div class="input-group ">
+        <textarea rows="4" cols="50" readonly="readonly" 
+        style="background-color:rgb(178, 173, 194);"
+           id="ad" name="to"> 
+          </textarea>
+            </div>
+
+          <br/>
+
+          <br/>
+              <div class="input-group ">
+                <span class="input-group-addon">$</span>
+                <input name="amount" type="number" placeholder="Amount "
+                 min="100" step="any" data-number-to-fixed="2"
+                  data-number-stepfactor="100" class="form-control currency" />
+            </div>
+
+                <br />
+                <br />
+        
+    </div>
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <input type='reset' class="btn btn-light" value='Clear' name='reset'>
+      <button type="submit" class="btn btn-primary">Confirm</button>
+    </form>
     </div>
   </div>
+</div>
+</div>
 
     <%- include includes/footer.ejs %>
-  <script>
-   
-  </script>
-
+                  <script src="http://localhost:5000/javascripts/msc.js"></script>
+                  <script src="http://localhost:5000/javascripts/wallet.js"></script>
 </body>
+<script>
+
+
+</script>
 
 </html>

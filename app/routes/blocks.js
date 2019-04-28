@@ -13,21 +13,27 @@ var miningReward = 100
   , difficulty = 2
 
 
-//will delete txns after the block is created  
-function deletePendings() { Txn.remove({}, function (err, txn) { }) }
+//will delete txns and  modify users balances : after the block is created 
+function deletePendings() { Txn.remove({}, function (err, txn) { 
+
+
+  
+}) }
+
+
+
 
 router.post('/minePendingTxns', function (req, res, next) {
   Txn.count({}).then((count) => {
     if (count == 0) {
       res.render('mine', { logged: true, message: 'All blocks are  already mined ,please try later.' });
     } else {
-
       //mining here + creating a block
       new Promise(function (resolve, reject) {
         Block.find({}).then((blks) => {
           Txn.find({},
             (err, txns) => {
-              //block params 
+              //a new block's params 
               const timestamp = Date.now()
               var hash = ""
               console.log("mining ...")
@@ -37,22 +43,23 @@ router.post('/minePendingTxns', function (req, res, next) {
                   blks[blks.length - 1].blockNumber).toString())
               }
 
-
-              //reward the miner
-              User.find({ publicKey: req.user.publicKey }, function (err, user) {
-                console.log("reward the miner");
+              //reward the miner and change the balances
+              User.findOneAndUpdate({ nickName: req.user.nickName },  { new: false }, 
+                (err, user)=> {
+                console.log("rewarding the miner"+req.user.nickName + "with"+miningReward);
                 user.balance += miningReward
+                user.save()
               })
               //update balances
               txns.forEach((txn) => {
+                console.log("updated balance from " + txn.fromName + " to" + txn.toName + "amount" + txn.amount);
                 //update reciever's balance
-                User.find({ publicKey: txn.fromAddress }, (err, sender) => sender.balance -= txn.amount)
-                //update sender's balance
-                User.find({ publicKey: txn.fromAddress }, (err, reciever) => reciever.balance += txn.amount)
-              }
-              )
-
-
+                User.findOneAndUpdate({ publicKey: txn.fromAddress },
+                  { new: false }, (err, sender) =>{sender.balance-=txn.amount; sender.save()})
+                    //update sender's balance
+                    User.findOneAndUpdate({ publicKey: txn.toAddress },
+                      { new: false }, (err, receiver) =>{receiver.balance+=txn.amount;receiver.save()})
+                    })
               //create the block
               var new_block = new Block({
                 timestamp: timestamp,
@@ -65,10 +72,7 @@ router.post('/minePendingTxns', function (req, res, next) {
                 new_block.save(async function (err, block) { })
               }
             })
-          resolve(
-            // on resolve make this
-            console.log("on resolve block mining ,make this")
-          )
+          resolve()
         }).then(function () {
           console.log("deleting pending txns ..")
           deletePendings()

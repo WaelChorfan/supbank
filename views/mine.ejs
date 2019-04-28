@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,37 +9,35 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="shortcut icon" href="http://localhost:5000/images/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
 
 
-  
+
+
 </head>
 
 <body>
-
 
   <%- include includes/header.ejs %>
   <div class="jumbotron">
     <div class="container">
 
-    <div class="alert alert-info">
-    <h5><%= message %></h5>
-    </div>
+      <div class="alert alert-info">
+        <h5><%= message %></h5>
+      </div>
 
-<form action="/blocks/minePendingTxns" method="post">
-    <button class="btn btn-success">
-        Mine Pending Transactions 
-      </button>
-  
-  </form>
+      <form action="/blocks/minePendingTxns" method="post">
+        <button class="btn btn-success">
+          Mine Pending Transactions
+        </button>
 
-  </div>
-  </div>
-  <div>
-    <%- include includes/footer.ejs %>
+      </form>
+
     </div>
+  </div>
+
+  <%- include includes/footer.ejs %>
+  <script src="http://localhost:5000/javascripts/msc.js"></script>
 
 </body>
 
 </html>
-

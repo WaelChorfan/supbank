@@ -29,8 +29,7 @@ router.post('/', function (req, res) {
 
   //current user 
   User.findOne({ publicKey: req.user.publicKey }, (err, userSender) => {
-    User.findOne({ nickName: req.body.to }, (err, userTo) => {
-     
+    User.findOne({ publicKey: req.body.to }, (err, userTo) => {
       //txn params
       const key = ec.keyFromPrivate(userSender.privateKey);
       const from = userSender.publicKey //address of current user
@@ -65,7 +64,7 @@ router.post('/', function (req, res) {
         var msg='Your transaction is pending ,you will receive an email when it is confirmed'
         res.render('index.ejs',
           {
-            message: "??"
+            message: msg
             , logged: true
           })
       });

@@ -18,6 +18,7 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
+
 	<script>
 		function copyToClipboard(element) {
 
@@ -30,35 +31,55 @@
 				alert(" Address copied to clip board")
 			}, 200);
 		}
-
 	</script>
-
 </head>
 
 <body>
 	<%- include includes/header.ejs %>
 	<div class="container">
-
 		<div class="jumbotron">
 			<div class="page-header text-center">
-				<h2><span class="fa fa-anchor"></span>Welcome 
-				  <p style="background-color:#877CB3;"><%=user.nickName %></p></h2>
+
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<span class="fa fa-check"></span>Welcome</div>
+					<div class="panel-body"><%=user.nickName %></div>
+				</div>
+
+
 			</div>
 
 			<div class="row">
 				<!-- INFORMATION -->
 				<div class="col-sm-12">
 					<div class="well well-sm">
-						<h3><span class="fa fa-google"></span> User Info</h3>
 						<p>
-							<strong>Email</strong>: <%= user.local.username|| user.google.email %><br>
-							<strong> Nick Name</strong>: <%= user.nickName  %><br>
-							<strong> Balance</strong>: <%= user.balance  %>$<br>
-							<strong>Your Wallet Address</strong>:
-							<textarea rows="4" cols="50" readonly="readonly" style="background-color:#877CB3;"
-							 id="ad" > <%= user.publicKey  %></textarea>
+
+							<div class="panel panel-primary">
+								<div class="panel-heading">User	 details
+								<span class="	glyphicon glyphicon-user"></span>
+								</div>
+								<div class="panel-body">
+									<strong>Email</strong>: <%= user.local.username|| user.google.email %><br>
+									<strong> Nick Name</strong>: <%= user.nickName  %><br>
+									<strong> Balance</strong>: <%= user.balance  %>$<br>
+								</div>
+							</div>
+
+							<div class="panel panel-info">
+								<div class="panel-heading"> Wallet Address 
+										<span class="	glyphicon glyphicon-barcode"></span>
+									
+								</div>
+								<div class="panel-body"> <textarea rows="3" cols="60" readonly="readonly"
+										style="background-color:#0FAAFF;"
+										id="ad"> <%= user.publicKey  %></textarea>
+
+									<button onclick="copyToClipboard('#ad')" class="btn btn-info">Copy To
+										Clipboard</button>
+								</div>
+							</div>
 						</p>
-						<button onclick="copyToClipboard('#ad')">Copy  Address To Clipboard</button>
 
 					</div>
 				</div>
@@ -69,6 +90,7 @@
 	</div>
 
 	<%- include includes/footer.ejs %>
+	<script src="http://localhost:5000/javascripts/msc.js"></script>
 
 </body>
 

@@ -45,11 +45,11 @@
 
 
 		<div class="jumbotron text-center">
-			
+		
 			
 		  <%if (!logged){%>
 				<div class="container">
-					<h3><span class="fa fa-lock"></span> <%=message%></h3>
+					<h3><span class="fa fa-lock"></span> Welcome to Sup Bank</h3>
 					<a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Login</a>
 					<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Signup</a>
 					<a href="/auth/google" class="btn btn-danger">
@@ -57,17 +57,15 @@
 				</div>
 				<%} else{%>
 				<div class="container">
-					<h3><span class="fa fa-unlock"></span> Welcome to Sup Bank</h3>
+					<h3><span class="fa fa-unlock"></span> 	<%=message%></h3>
 
 				</div>
 				<%}%>
 
 	</div>
 
-
-	<div>
 		<%- include includes/footer.ejs %>
-		</div>
+	<script src="http://localhost:5000/javascripts/msc.js"></script>
 
 </body>
 
