@@ -13,7 +13,7 @@ require('./config/passport')(passport);
 
 
 var configDB = require('./config/database.js');
-mongoose.connect(configDB.local, { useNewUrlParser: true });
+mongoose.connect(configDB.cloud, { useNewUrlParser: true });
 
 app.use(morgan('dev'));
 app.use(cookieParser());
